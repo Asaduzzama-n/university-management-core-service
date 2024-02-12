@@ -1,22 +1,23 @@
 import app from './app';
 import config from './config';
+import { errorLogger, logger } from './shared/logger';
 
 async function main() {
   const server = app.listen(config.port, () => {
-    console.log(`Server is listening on port : ${config.port}`);
+    logger.info(`Server is listening on port : ${config.port}`);
   });
 
   const exitHandler = () => {
     if (server) {
       server.close(() => {
-        console.log('Server closed!');
+        logger.info('Server closed!');
       });
     }
     process.exit(1);
   };
 
   const unExpectedErrorHandler = (error: unknown) => {
-    console.error(error);
+    errorLogger.error(error);
     exitHandler();
   };
   process.on('uncaughtException', unExpectedErrorHandler);
